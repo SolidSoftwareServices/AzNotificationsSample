@@ -1,0 +1,72 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Notifications.Ui.DataServices.Notifications
+@using Core.Cqrs.Abstractions.Queries
+@using Core.Cqrs.Abstractions.Commands
+@using Notifications.Ui.DomainModels
+@using Notifications.Ui.DomainServices.Notifications.Commands.Send
+@using Notifications.Ui.DomainServices.Users.Queries
+
+@inject IQueryResolver QueryResolver
+
+@inject ICommandDispatcher CommandDispatcher
+
+@if (_recipients == null)
+{
+	<p><em>Loading recipients...</em></p>
+}
+else
+{
+	<h5>Send messages:</h5>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Recipient</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var recipient in _recipients)
+			{
+				<tr>
+					<td>@recipient.DisplayName</td>
+					<td><button class="btn btn-primary" @onclick="()=>SendNotification(recipient)">Send</button></td>
+				</tr>
+			}
+		</tbody>
+		<tfoot>
+			<tr>
+				<tf>@_status</tf>
+			</tr>
+		</tfoot>
+	</table>
+}
+
+
+@code {
+	private IEnumerable<UserInfo> _recipients;
+	private string _status;
+
+	protected override async Task OnInitializedAsync()
+	{
+		_recipients = await QueryResolver.GetAllUsers();
+	}
+
+	public async Task SendNotification(UserInfo userInfo)
+	{
+		var getSender = QueryResolver.GetCurrentUser();
+
+		var notification = new NotificationInfo
+		{
+			Text = "Are you ready?",
+			From = await getSender,
+			To = userInfo,
+
+		};
+		_status = $"Sending --> {notification}....";
+		await CommandDispatcher.SendNotification(notification);
+
+		_status = $"Sent --> {notification}";
+		StateHasChanged();
+
+	}
+}

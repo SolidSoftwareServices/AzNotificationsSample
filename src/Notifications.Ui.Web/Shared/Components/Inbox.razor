@@ -1,0 +1,85 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Notifications.Ui.Events
+@using Core.Events.Abstractions
+@using Core.Cqrs.Abstractions.Queries
+@using Core.Cqrs.Abstractions.Commands
+@using Notifications.Ui.DomainModels
+@using Notifications.Ui.DomainServices.Notifications.Queries
+@using Notifications.Ui.DomainServices.Notifications.Commands.MarkAsRead
+@inject IQueryResolver QueryResolver
+@inject ICommandDispatcher CommandDispatcher
+
+@inject IEventsSubscriber<NotificationEvent, NotificationInfo> EventsSubscriber
+
+@if (_messages == null)
+{
+	<p><em>Loading messages...</em></p>
+}
+else
+{
+	<h5>Pending messages to Read:</h5>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>From</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var message in (_messages))
+			{
+				<tr>
+					<td>@message.From</td>
+					<td>
+						<button class="btn btn-primary" @onclick="() => SetRead(message)">Mark as Read</button>
+					</td>
+
+				</tr>
+			}
+		</tbody>
+		<tfoot>
+			<tr>
+				<tf>@_status</tf>
+			</tr>
+		</tfoot>
+	</table>
+}
+
+
+@code {
+	private List<NotificationInfo> _messages = new List<NotificationInfo>();
+	private string _status;
+
+	protected override async Task OnInitializedAsync()
+	{
+
+
+		await EventsSubscriber.SubscribeAsync(NotificationEvent.NewNotificationReceived, n =>
+		{
+			_messages.Add(n);
+			StateHasChanged();
+			return Task.CompletedTask;
+		});
+
+		await EventsSubscriber.SubscribeAsync(NotificationEvent.NotificationWasRead, n =>
+		{
+			_messages.RemoveAll(_ => _.Id == n.Id);
+
+			StateHasChanged();
+			return Task.CompletedTask;
+		});
+
+		_messages = (await QueryResolver.GetNonReadNotifications()).ToList();
+	}
+
+
+	public async Task SetRead(NotificationInfo message)
+	{
+
+		_status = $"Marking as read --> {message}....";
+		await CommandDispatcher.MarkNotificationAsRead(message);
+
+		_status = $"Completed --> {message}";
+		StateHasChanged();
+	}
+}

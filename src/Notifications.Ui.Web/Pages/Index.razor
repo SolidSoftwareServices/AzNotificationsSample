@@ -1,0 +1,22 @@
+﻿@using Notifications.Ui.Web.Shared.Components;
+@page "/"
+
+<h1>Notifications</h1>
+<AuthorizeView>
+	<Authorized>
+		<table class="table">
+			<tr>
+				<td>
+					<Inbox />
+				</td>
+				<td>
+					<MessageSender />
+				</td>
+			</tr>
+
+		</table>
+	</Authorized>
+	<NotAuthorized>
+		Need to <em> <a href="MicrosoftIdentity/Account/SignIn">Log in</a></em> first
+	</NotAuthorized>
+</AuthorizeView>
