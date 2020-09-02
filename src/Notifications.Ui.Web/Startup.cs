@@ -87,6 +87,7 @@ namespace Notifications.Ui.Web
 			{
 				endpoints.MapControllers();
 				endpoints.MapBlazorHub();
+				
 				endpoints.MapHub<NotificationEventsHub>(Configuration["Hubs:NotificationEventsUrl"]);
 
 				endpoints.MapFallbackToPage("/_Host");

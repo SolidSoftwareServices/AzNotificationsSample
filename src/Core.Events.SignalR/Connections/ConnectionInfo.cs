@@ -1,4 +1,4 @@
-﻿namespace Notifications.Ui.Events.Connections
+﻿namespace Core.Events.SignalR.Connections
 {
 	public class ConnectionInfo
 	{

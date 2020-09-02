@@ -1,13 +1,8 @@
-﻿using System;
-using Core.Events.Abstractions;
-using Microsoft.Azure.SignalR;
+﻿using Core.Events.Abstractions;
+using Core.Events.SignalR.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using Notifications.Ui.Events.Connections;
-using Notifications.Ui.Events.Hubs;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Builder;
 using Notifications.Ui.DomainModels;
+using Notifications.Ui.Events.Hubs;
 
 namespace Notifications.Ui.Events.Infrastructure
 {
@@ -15,17 +10,13 @@ namespace Notifications.Ui.Events.Infrastructure
 	{
 		public static IServiceCollection AddUiEventHubs(this IServiceCollection services)
 		{
-			services.AddSignalR(opts => { });
+			services.AddCoreSignalR();
 
 			services.AddTransient<IEventsPublisher<NotificationEvent, NotificationInfo>, NotificationEventsHub>();
 			services.AddTransient<IEventsSubscriber<NotificationEvent, NotificationInfo>, NotificationEventsHub>();
-			services.AddTransient<IConnectionsRepository, InMemoryConnectionsRepository>();
+
 			//so we allow fluent config
 			return services;
 		}
-
-		
 	}
-
-	
 }

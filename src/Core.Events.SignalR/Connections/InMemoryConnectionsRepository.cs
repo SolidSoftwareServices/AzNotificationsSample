@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Notifications.Ui.Events.Connections
+namespace Core.Events.SignalR.Connections
 {
 	class InMemoryConnectionsRepository : IConnectionsRepository
 	{

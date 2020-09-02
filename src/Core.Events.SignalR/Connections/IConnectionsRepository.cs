@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Notifications.Ui.Events.Connections
+namespace Core.Events.SignalR.Connections
 {
-	 interface IConnectionsRepository
+	 public interface IConnectionsRepository
 	{
 		Task Add(ConnectionInfo connection);
 		Task Remove(ConnectionInfo connection);

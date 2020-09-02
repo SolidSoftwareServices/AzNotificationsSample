@@ -1,7 +1,5 @@
 ﻿using Core.System;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Graph;
 
 namespace Notifications.Ui.Web.ApplicationServices.Settings
 {
