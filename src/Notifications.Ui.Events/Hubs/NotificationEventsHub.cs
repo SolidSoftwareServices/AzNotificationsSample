@@ -13,8 +13,6 @@ using ConnectionInfo = Notifications.Ui.Events.Connections.ConnectionInfo;
 
 namespace Notifications.Ui.Events.Hubs
 {
-
-	
 	internal class NotificationEventsHub : Hub<NotificationInfo>, 
 		IEventsPublisher<NotificationEvent,NotificationInfo>,
 		IEventsSubscriber<NotificationEvent,NotificationInfo>
@@ -27,14 +25,14 @@ namespace Notifications.Ui.Events.Hubs
 
 		public NotificationEventsHub(IConfiguration configuration, NavigationManager navigationManager,
 			IHubContext<NotificationEventsHub> hubContext, IConnectionsRepository connectionsRepository,
-			 IQueryResolver queryResolver)
+			 IQueryResolver queryResolver, IUiEventsSettings settings)
 		{
 			_hubContext = hubContext;
 			_connectionsRepository = connectionsRepository;
 			_queryResolver = queryResolver;
 			_connection = new Lazy<HubConnection>(() =>
 			{
-				var url = navigationManager.ToAbsoluteUri(configuration["Hubs:NotificationEventsUrl"]);
+				var url = navigationManager.ToAbsoluteUri(settings.NotificationEventsUrl);
 				return new HubConnectionBuilder().WithUrl(url, opts =>
 				{
 				}).Build();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +28,28 @@ namespace Core.System
 				}
 			}
 
-			//so we allow fluent config
+			return services;
+		}
+
+		public static IServiceCollection RegisterAsImplementedInterfacesTransient<TImplementation>(this IServiceCollection services)
+		{
+			var allInterfaces=new List<Type>();
+			var current = typeof(TImplementation);
+
+			do
+			{
+				var interfaces = current.GetInterfaces();
+				if (interfaces.Any())
+				{
+					allInterfaces.AddRange(interfaces);
+				}
+			} while ((current = current.BaseType) != null);
+
+			foreach (var @interface in allInterfaces.Distinct())
+			{
+				services.AddTransient(@interface, typeof(TImplementation));
+			}
+
 			return services;
 		}
 	}

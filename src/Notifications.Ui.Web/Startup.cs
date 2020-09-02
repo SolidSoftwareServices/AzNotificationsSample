@@ -12,6 +12,7 @@ using Notifications.Ui.DomainServices.Infrastructure;
 using Notifications.Ui.Events.Hubs;
 using Notifications.Ui.Events.Infrastructure;
 using Notifications.Ui.Web.ApplicationServices.Authentication;
+using Notifications.Ui.Web.ApplicationServices.Settings;
 
 namespace Notifications.Ui.Web
 {
@@ -51,6 +52,7 @@ namespace Notifications.Ui.Web
 				opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] {"application/octet-stream"});
 			});
 			services
+				.AddAppSettings()
 				.AddAppAuthentication(Configuration)
 				.AddAzureNotificationDataServices()
 				.AddUiEventHubs()
