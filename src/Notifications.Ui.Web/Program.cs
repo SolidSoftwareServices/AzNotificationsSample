@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Notifications.Ui.Web.ApplicationServices.HostedServices;
 
 namespace Notifications.Ui.Web
 {
@@ -20,9 +22,19 @@ namespace Notifications.Ui.Web
 
 		public static IHostBuilder CreateHostBuilder(string[] args) =>
 			Host.CreateDefaultBuilder(args)
+				.ConfigureLogging(logging =>
+				{
+					logging.ClearProviders();
+					logging.AddConsole();
+				})
 				.ConfigureWebHostDefaults(webBuilder =>
 				{
 					webBuilder.UseStartup<Startup>();
+
+				})
+				.ConfigureServices(services =>
+				{
+					services.AddHostedService<CommandsListener>();
 				});
 	}
 }

@@ -1,5 +1,7 @@
+using System;
 using System.Linq;
 using Core.Cqrs;
+using Core.Messaging.Azure.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -11,6 +13,7 @@ using Notifications.Ui.DataServices.Azure.Infrastructure;
 using Notifications.Ui.DomainServices.Infrastructure;
 using Notifications.Ui.Events.Hubs;
 using Notifications.Ui.Events.Infrastructure;
+using Notifications.Ui.Web.ApplicationServices;
 using Notifications.Ui.Web.ApplicationServices.Authentication;
 using Notifications.Ui.Web.ApplicationServices.Settings;
 
@@ -21,10 +24,11 @@ namespace Notifications.Ui.Web
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
+			AppSettings=new Lazy<AppSettings>(()=>new AppSettings(configuration));
 		}
 
 		public IConfiguration Configuration { get; }
-
+		private Lazy<AppSettings> AppSettings { get; }
 		// This method gets called by the runtime. Use this method to add services to the container.
 		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
 		public void ConfigureServices(IServiceCollection services)
@@ -53,10 +57,17 @@ namespace Notifications.Ui.Web
 			});
 			services
 				.AddAppSettings()
+				
+				//-aspects
 				.AddAppAuthentication(Configuration)
-				.AddAzureNotificationDataServices()
+				
+				//comm-ports
 				.AddUiEventHubs()
-				.AddInProcCqrsDispatchers()
+				.AddAzureServiceBusAsCommandDispatcher()
+				.AddInProcQueryResolver()
+
+				//layers
+				.AddAzureNotificationDataServices()
 				.AddDomainServices();
 		}
 
@@ -81,14 +92,14 @@ namespace Notifications.Ui.Web
 
 			app.UseAuthentication();
 			app.UseAuthorization();
-
+			
 			//app.UseSession();
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
 				endpoints.MapBlazorHub();
 				
-				endpoints.MapHub<NotificationEventsHub>(Configuration["Hubs:NotificationEventsUrl"]);
+				endpoints.MapHub<NotificationEventsHub>(AppSettings.Value.NotificationEventsUrl);
 
 				endpoints.MapFallbackToPage("/_Host");
 			});

@@ -7,7 +7,7 @@ namespace Notifications.Ui.Web.ApplicationServices.Settings
 	{
 		public static IServiceCollection AddAppSettings(this IServiceCollection services)
 		{
-			return services.RegisterAsImplementedInterfacesTransient<AppSettings>();
+			return services.AddImplementedInterfacesAsTransient<AppSettings>();
 		}
 	}
 }

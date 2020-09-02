@@ -11,7 +11,7 @@ namespace Notifications.Ui.Events.Infrastructure
 		{
 			services.AddCoreSignalR();
 
-			services.RegisterAsImplementedInterfacesTransient<NotificationEventsHub>();
+			services.AddImplementedInterfacesAsTransient<NotificationEventsHub>();
 
 			//so we allow fluent config
 			return services;

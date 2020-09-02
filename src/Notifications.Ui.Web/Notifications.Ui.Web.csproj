@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core.Cqrs\Core.Cqrs.csproj" />
+    <ProjectReference Include="..\Core.Messaging.Azure\Core.Messaging.Azure.csproj" />
     <ProjectReference Include="..\Notifications.Ui.DataServices.Azure\Notifications.Ui.DataServices.Azure.csproj" />
     <ProjectReference Include="..\Notifications.Ui.DataServices\Notifications.Ui.DataServices.csproj" />
     <ProjectReference Include="..\Notifications.Ui.Events\Notifications.Ui.Events.csproj" />

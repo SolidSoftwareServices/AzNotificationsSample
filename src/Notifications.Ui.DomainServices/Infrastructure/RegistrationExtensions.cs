@@ -7,7 +7,7 @@ namespace Notifications.Ui.DomainServices.Infrastructure
 	{
 		public static IServiceCollection AddDomainServices(this IServiceCollection services)
 		{
-			services.RegisterAssemblyTypesAsTransient(typeof(RegistrationExtensions).Assembly);
+			services.AddAssemblyTypesAsTransient(typeof(RegistrationExtensions).Assembly);
 			//so we allow fluent config
 			return services;
 		}

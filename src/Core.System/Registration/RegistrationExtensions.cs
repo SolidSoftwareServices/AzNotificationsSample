@@ -8,7 +8,7 @@ namespace Core.System
 {
 	public static class RegistrationExtensions
 	{
-		public static IServiceCollection RegisterAssemblyTypesAsTransient(this IServiceCollection services,
+		public static IServiceCollection AddAssemblyTypesAsTransient(this IServiceCollection services,
 			Assembly assembly, Func<Type, bool> filterFunc = null)
 		{
 			var implementations = assembly.GetTypes().Where(x =>
@@ -24,7 +24,7 @@ namespace Core.System
 			return services;
 		}
 
-		public static IServiceCollection RegisterAsImplementedInterfacesTransient<TImplementation>(
+		public static IServiceCollection AddImplementedInterfacesAsTransient<TImplementation>(
 			this IServiceCollection services)
 		{
 			var allInterfaces = new List<Type>();
