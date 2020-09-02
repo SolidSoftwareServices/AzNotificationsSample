@@ -1,7 +1,6 @@
-﻿using Core.Events.Abstractions;
-using Core.Events.SignalR.Infrastructure;
+﻿using Core.Events.SignalR.Infrastructure;
+using Core.System;
 using Microsoft.Extensions.DependencyInjection;
-using Notifications.Ui.DomainModels;
 using Notifications.Ui.Events.Hubs;
 
 namespace Notifications.Ui.Events.Infrastructure
@@ -12,8 +11,7 @@ namespace Notifications.Ui.Events.Infrastructure
 		{
 			services.AddCoreSignalR();
 
-			services.AddTransient<IEventsPublisher<NotificationEvent, NotificationInfo>, NotificationEventsHub>();
-			services.AddTransient<IEventsSubscriber<NotificationEvent, NotificationInfo>, NotificationEventsHub>();
+			services.RegisterAsImplementedInterfacesTransient<NotificationEventsHub>();
 
 			//so we allow fluent config
 			return services;

@@ -8,7 +8,7 @@ namespace Notifications.Ui.DomainServices.Notifications.Commands.Send
 	{
 		public static async Task SendNotification(this ICommandDispatcher dispatcher, NotificationInfo notification)
 		{
-			await dispatcher.Execute(new SendNotification { Notification = notification });
+			await dispatcher.Execute(new SendNotification {Notification = notification});
 		}
 	}
 }

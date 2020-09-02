@@ -31,9 +31,9 @@ namespace Notifications.Ui.DataServices.Azure.Notifications
 			return _dbCollection[notificationId];
 		}
 
-	
 
-		public async Task<IEnumerable<NotificationInfo>> GetInbox(UserInfo user, NotificationInfo.NotificationStatus? status)
+		public async Task<IEnumerable<NotificationInfo>> GetInbox(UserInfo user,
+			NotificationInfo.NotificationStatus? status)
 		{
 			return _dbCollection.Values.Where(x => user.Equals(x.To) && (status == null || x.Status == status));
 		}

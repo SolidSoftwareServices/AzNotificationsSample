@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Notifications.Ui.DataServices.Azure.Notifications;
 using Notifications.Ui.DataServices.Notifications;
 

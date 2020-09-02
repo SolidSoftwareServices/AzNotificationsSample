@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Core.Cqrs.Abstractions.Events;
 using Core.Events.SignalR.Connections;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 
 namespace Core.Events.SignalR
 {
-	public abstract class UserDirectedEventsHub<TImplementation, T>:Hub<T> 
-		where T : class
-		where TImplementation: UserDirectedEventsHub<TImplementation,T>
+	public abstract class UserDirectedEventsHub<TImplementation> : Hub<CqrsEvent>
+		where TImplementation : UserDirectedEventsHub<TImplementation>
 	{
-		private readonly IHubContext<TImplementation> _hubContext;
-		private readonly IConnectionsRepository _connectionsRepository;
 		private readonly Lazy<HubConnection> _connection;
+		private readonly IConnectionsRepository _connectionsRepository;
+		private readonly IHubContext<TImplementation> _hubContext;
 
 		protected UserDirectedEventsHub(IHubContext<TImplementation> hubContext,
 			IConnectionsRepository connectionsRepository, Func<Uri> getConnectionUrl)
@@ -21,49 +21,38 @@ namespace Core.Events.SignalR
 			_connectionsRepository = connectionsRepository;
 
 			_connection = new Lazy<HubConnection>(() =>
-			{ 
-				return new HubConnectionBuilder().WithUrl(getConnectionUrl(), opts =>
-				{
-				}).Build();
+			{
+				return new HubConnectionBuilder().WithUrl(getConnectionUrl(), opts => { }).Build();
 			});
 		}
 
-		protected async Task _DoSubscribeAsync(string toEvent,Func<T,Task> subscriptionHandler)
+		protected async Task _DoSubscribeAsync<TEvent>(string toEvent, Func<TEvent, Task> subscriptionHandler)
+			where TEvent : CqrsEvent
 		{
 			var connection = _connection.Value;
 			connection.On(toEvent, subscriptionHandler);
 			if (connection.State == HubConnectionState.Disconnected)
 			{
 				var currentUserPrincipalName = await GetCurrentUserPrincipalName();
-				var connectionInfo = new ConnectionInfo { UserId = currentUserPrincipalName};
-				connection.Closed += async e =>
-				{
-					await _connectionsRepository.Remove(connectionInfo);
-				};
+				var connectionInfo = new ConnectionInfo {UserId = currentUserPrincipalName};
+				connection.Closed += async e => { await _connectionsRepository.Remove(connectionInfo); };
 
 				await connection.StartAsync();
 				connectionInfo.ConnectionId = connection.ConnectionId;
 				await _connectionsRepository.Add(connectionInfo);
 			}
 		}
-		public async Task _DoPublishAsync(string toPrincipalName, string @event, T message)
-		{
 
+		protected async Task _DoPublishAsync<TEvent>(string toPrincipalName, TEvent message) where TEvent : CqrsEvent
+		{
 			var connections = await _connectionsRepository.GetAsync(toPrincipalName);
 			foreach (var connection in connections)
-			{
-
-				await _hubContext.Clients.Client(connection).SendAsync(@event, message);
-			}
-
+				await _hubContext.Clients.Client(connection).SendAsync(message.Name, message);
 		}
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposing)
-			{
-				DisposeConnection().GetAwaiter().GetResult();
-			}
+			if (disposing) DisposeConnection().GetAwaiter().GetResult();
 
 			base.Dispose(disposing);
 

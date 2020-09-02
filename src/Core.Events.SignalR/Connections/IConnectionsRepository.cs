@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Core.Events.SignalR.Connections
 {
-	 public interface IConnectionsRepository
+	public interface IConnectionsRepository
 	{
 		Task Add(ConnectionInfo connection);
 		Task Remove(ConnectionInfo connection);

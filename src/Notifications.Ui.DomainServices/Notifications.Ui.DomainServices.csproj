@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core.Cqrs.Abstractions\Core.Cqrs.Abstractions.csproj" />
-    <ProjectReference Include="..\Core.Events.Abstractions\Core.Events.Abstractions.csproj" />
+    <ProjectReference Include="..\Core.Messaging.Abstractions\Core.Messaging.Abstractions.csproj" />
     <ProjectReference Include="..\Core.System\Core.System.csproj" />
     <ProjectReference Include="..\Notifications.Ui.DataServices.Models\Notifications.Ui.DomainModels.csproj" />
     <ProjectReference Include="..\Notifications.Ui.DataServices\Notifications.Ui.DataServices.csproj" />

@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Cqrs.Abstractions.Commands;
+﻿using Core.Cqrs.Abstractions.Commands;
 using Core.Cqrs.Abstractions.Queries;
 using Core.Cqrs.Commands;
 using Core.Cqrs.Queries;

@@ -5,9 +5,8 @@ using Core.System;
 
 namespace Core.Cqrs.Queries
 {
-	class InProcQueryResolver:IQueryResolver
+	internal class InProcQueryResolver : IQueryResolver
 	{
-
 		private readonly IServiceProvider _serviceProvider;
 
 		public InProcQueryResolver(IServiceProvider serviceProvider)
@@ -15,7 +14,7 @@ namespace Core.Cqrs.Queries
 			_serviceProvider = serviceProvider;
 		}
 
-		public async Task<TResult> ExecuteAsync<TQuery,TResult>(TQuery query) where TQuery : IQuery
+		public async Task<TResult> ExecuteAsync<TQuery, TResult>(TQuery query) where TQuery : IQuery
 		{
 			var queryHandler = _serviceProvider
 				.Resolve<IQueryHandler<TQuery, TResult>>();

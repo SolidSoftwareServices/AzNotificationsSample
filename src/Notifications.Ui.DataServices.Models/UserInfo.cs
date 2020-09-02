@@ -7,11 +7,6 @@ namespace Notifications.Ui.DomainModels
 		public string DisplayName { get; set; }
 		public string PrincipalName { get; set; }
 
-		public override string ToString()
-		{
-			return $"{DisplayName}";
-		}
-
 		public bool Equals(UserInfo other)
 		{
 			if (ReferenceEquals(null, other)) return false;
@@ -19,11 +14,16 @@ namespace Notifications.Ui.DomainModels
 			return DisplayName == other.DisplayName && PrincipalName == other.PrincipalName;
 		}
 
+		public override string ToString()
+		{
+			return $"{DisplayName}";
+		}
+
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != this.GetType()) return false;
+			if (obj.GetType() != GetType()) return false;
 			return Equals((UserInfo) obj);
 		}
 
@@ -31,7 +31,8 @@ namespace Notifications.Ui.DomainModels
 		{
 			unchecked
 			{
-				return ((DisplayName != null ? DisplayName.GetHashCode() : 0) * 397) ^ (PrincipalName != null ? PrincipalName.GetHashCode() : 0);
+				return ((DisplayName != null ? DisplayName.GetHashCode() : 0) * 397) ^
+				       (PrincipalName != null ? PrincipalName.GetHashCode() : 0);
 			}
 		}
 	}

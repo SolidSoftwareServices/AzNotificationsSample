@@ -1,15 +1,17 @@
 ﻿@using Microsoft.AspNetCore.Http
 @using Notifications.Ui.Events
-@using Core.Events.Abstractions
 @using Core.Cqrs.Abstractions.Queries
 @using Core.Cqrs.Abstractions.Commands
+@using Core.Messaging.Abstractions
+@using Core.Messaging.Abstractions.Events
 @using Notifications.Ui.DomainModels
+@using Notifications.Ui.DomainModels.Events
 @using Notifications.Ui.DomainServices.Notifications.Queries
 @using Notifications.Ui.DomainServices.Notifications.Commands.MarkAsRead
 @inject IQueryResolver QueryResolver
 @inject ICommandDispatcher CommandDispatcher
 
-@inject IEventsSubscriber<NotificationEvent, NotificationInfo> EventsSubscriber
+@inject IEventsSubscriber<NotificationEvent> EventsSubscriber
 
 @if (_messages == null)
 {
@@ -54,16 +56,16 @@ else
 	{
 
 
-		await EventsSubscriber.SubscribeAsync(NotificationEvent.NewNotificationReceived, n =>
+		await EventsSubscriber.SubscribeAsync(NotificationEventType.NewNotificationCreated.ToString(), n =>
 		{
-			_messages.Add(n);
+			_messages.Add(n.Notification);
 			StateHasChanged();
 			return Task.CompletedTask;
 		});
 
-		await EventsSubscriber.SubscribeAsync(NotificationEvent.NotificationWasRead, n =>
+		await EventsSubscriber.SubscribeAsync(NotificationEventType.NotificationWasRead.ToString(), n =>
 		{
-			_messages.RemoveAll(_ => _.Id == n.Id);
+			_messages.RemoveAll(_ => _.Id == n.Notification.Id);
 
 			StateHasChanged();
 			return Task.CompletedTask;

@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly:InternalsVisibleTo("Notifications.Ui.Web")]
+[assembly: InternalsVisibleTo("Notifications.Ui.Web")]

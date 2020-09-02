@@ -3,7 +3,7 @@ using Notifications.Ui.DomainModels;
 
 namespace Notifications.Ui.DomainServices.Notifications.Commands.MarkAsRead
 {
-	class MarkAsRead:ICommand
+	internal class MarkAsRead : ICommand
 	{
 		public NotificationInfo Notification { get; set; }
 	}

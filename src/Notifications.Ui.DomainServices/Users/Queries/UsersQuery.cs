@@ -2,7 +2,7 @@
 
 namespace Notifications.Ui.DomainServices.Users.Queries
 {
-	public class UsersQuery:IQuery
+	public class UsersQuery : IQuery
 	{
 		public bool OnlyMe { get; set; }
 	}

@@ -3,7 +3,7 @@ using Notifications.Ui.DomainModels;
 
 namespace Notifications.Ui.DomainServices.Notifications.Commands.Send
 {
-	class SendNotification:ICommand
+	internal class SendNotification : ICommand
 	{
 		public NotificationInfo Notification { get; set; }
 	}

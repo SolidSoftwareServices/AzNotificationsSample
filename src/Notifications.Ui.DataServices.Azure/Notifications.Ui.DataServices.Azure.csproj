@@ -10,7 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core.Events.Abstractions\Core.Events.Abstractions.csproj" />
     <ProjectReference Include="..\Notifications.Ui.Events\Notifications.Ui.Events.csproj" />
   </ItemGroup>
 

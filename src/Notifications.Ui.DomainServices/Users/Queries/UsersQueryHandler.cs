@@ -8,7 +8,7 @@ using Notifications.Ui.DomainModels;
 
 namespace Notifications.Ui.DomainServices.Users.Queries
 {
-	class UsersQueryHandler : IQueryHandler<UsersQuery,IEnumerable<UserInfo>>
+	internal class UsersQueryHandler : IQueryHandler<UsersQuery, IEnumerable<UserInfo>>
 	{
 		private readonly Lazy<GraphServiceClient> _graphClient;
 
@@ -33,18 +33,17 @@ namespace Notifications.Ui.DomainServices.Users.Queries
 					.GetAsync()).Cast<User>();
 
 				//TODO: paging user results 
-
 			}
 
 
-
 			return dtos
-				.Select(Map);;
+				.Select(Map);
+			;
 		}
 
 		private UserInfo Map(User user)
 		{
-			return new UserInfo { PrincipalName = user.UserPrincipalName, DisplayName = user.DisplayName };
+			return new UserInfo {PrincipalName = user.UserPrincipalName, DisplayName = user.DisplayName};
 		}
 	}
 }

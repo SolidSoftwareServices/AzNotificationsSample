@@ -11,4 +11,8 @@
     <PackageReference Include="Microsoft.Azure.SignalR" Version="1.5.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Cqrs.Abstractions\Core.Cqrs.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

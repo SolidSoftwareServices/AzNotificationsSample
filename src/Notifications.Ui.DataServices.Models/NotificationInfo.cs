@@ -4,10 +4,18 @@ namespace Notifications.Ui.DomainModels
 {
 	public class NotificationInfo
 	{
-		public Guid Id { get; set; } = Guid.NewGuid();
-		public DateTime Date { get; set; }=DateTime.UtcNow;
+		public enum NotificationStatus
+		{
+			New = 1,
+			Sent,
+			ReadCompleted,
+			Errored
+		}
 
-		public string Text{ get; set; }
+		public Guid Id { get; set; } = Guid.NewGuid();
+		public DateTime Date { get; set; } = DateTime.UtcNow;
+
+		public string Text { get; set; }
 
 		public NotificationStatus Status { get; set; }
 
@@ -16,18 +24,8 @@ namespace Notifications.Ui.DomainModels
 
 		public override string ToString()
 		{
-			return $"{nameof(Date)}: {Date}, {nameof(Text)}: {Text}, {nameof(Status)}: {Status}, {nameof(From)}: {From}, {nameof(To)}: {To}";
-		}
-
-		public enum NotificationStatus
-		{
-			New=1,
-			Sent,
-			ReadCompleted,
-			Errored
-
+			return
+				$"{nameof(Date)}: {Date}, {nameof(Text)}: {Text}, {nameof(Status)}: {Status}, {nameof(From)}: {From}, {nameof(To)}: {To}";
 		}
 	}
-
-	
 }
