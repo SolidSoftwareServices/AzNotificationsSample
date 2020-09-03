@@ -8,5 +8,10 @@ namespace Core.System
 		{
 			return (TResult) serviceProvider.GetService(typeof(TResult));
 		}
+
+		public static TResult ResolveAs<TResult>(this IServiceProvider serviceProvider,Type type)
+		{
+			return (TResult)serviceProvider.GetService(type);
+		}
 	}
 }

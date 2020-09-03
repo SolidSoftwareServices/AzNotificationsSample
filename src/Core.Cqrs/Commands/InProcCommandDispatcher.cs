@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Core.Cqrs.Abstractions.Commands;
 using Core.System;
@@ -19,12 +21,37 @@ namespace Core.Cqrs.Commands
 			_logger = logger;
 		}
 
-		public async Task Execute<TCommand>(TCommand command) where TCommand : CqrsCommand
+		public async Task ExecuteAsync<TCommand>(TCommand command) where TCommand : CqrsCommand
 		{
 			await _serviceProvider
 				.Resolve<ICommandHandler<TCommand>>()
 				.ExecuteAsync(command);
 			_logger.LogInformation($"Dispatched command: {command.Id}");
+		}
+
+		private static  readonly ConcurrentDictionary<Type,MethodInfo> Cache=new ConcurrentDictionary<Type, MethodInfo>();
+
+		public async Task ExecuteAsync(object command)
+		{
+			if (!(command is CqrsCommand))
+			{
+				throw new ArgumentException("Command not valid");
+			}
+
+			var type = command.GetType();
+
+			var methodInfo = Cache.GetOrAdd(type, (k) =>
+
+				typeof(InProcCommandDispatcher)
+					.GetMethods()
+					.Single(x =>
+					{
+						var genericArguments = x.GetGenericArguments();
+						return x.Name == nameof(ExecuteAsync) && genericArguments.Any();
+					})
+					.MakeGenericMethod(type)
+			);
+			await (Task)methodInfo.Invoke(this, new[] {command});
 		}
 	}
 }

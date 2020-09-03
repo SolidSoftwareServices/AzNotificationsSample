@@ -9,7 +9,7 @@ namespace Notifications.Ui.DomainServices.Notifications.Commands.MarkAsRead
 		public static async Task MarkNotificationAsRead(this ICommandDispatcher dispatcher,
 			NotificationInfo notification)
 		{
-			await dispatcher.Execute(new MarkAsRead {Notification = notification});
+			await dispatcher.ExecuteAsync(new MarkAsRead {Notification = notification});
 		}
 	}
 }

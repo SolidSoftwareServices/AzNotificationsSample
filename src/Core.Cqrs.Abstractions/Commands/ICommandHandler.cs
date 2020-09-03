@@ -6,4 +6,5 @@ namespace Core.Cqrs.Abstractions.Commands
 	{
 		Task ExecuteAsync(TCommand command);
 	}
+
 }
